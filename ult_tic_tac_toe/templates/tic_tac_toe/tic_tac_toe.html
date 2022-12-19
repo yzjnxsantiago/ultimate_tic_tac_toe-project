@@ -1,0 +1,244 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Tic-Tac-Toe</title>
+    <script src="{% static 'ult_tic_tac_toe/js/tic_tac_toe.js' %}"></script>
+  </head>
+
+  <body>
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+    
+      .container {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: rgb(255, 255, 255);
+      }
+    
+      .play-area {
+        display: grid;
+        width: 600px;
+        height: 600px;
+        grid-template-columns: auto auto auto;
+      }
+      .block {
+        display: grid;
+        width: 200px;
+        height: 200px;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        font-weight: bold;
+        border: 3px solid black;
+        transition: background 0.2s ease-in-out;
+        grid-template-columns: auto auto auto;
+      }
+    
+        #block_0,
+        #block_1,
+        #block_2,
+        #inner_0,
+        #inner_1,
+        #inner_2  {
+        border-top: none;
+        }
+    
+        #block_0,
+        #block_3,
+        #block_6,
+        #inner_0,
+        #inner_3,
+        #inner_6 {
+        border-left: none;
+        }
+    
+        #block_6,
+        #block_7,
+        #block_8,
+        #inner_6,
+        #inner_7,
+        #inner_8 {
+        border-bottom: none;
+        }
+    
+        #block_2,
+        #block_5,
+        #block_8,
+        #inner_2,
+        #inner_5,
+        #inner_8 {
+        border-right: none;
+        }
+        
+       .inner_block {
+        display: flex;
+        width: 55px;
+        height: 59px;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        border: 3px solid black;
+        transition: background 0.2s ease-in-out;
+      }
+
+      .inner_block:hover{
+
+        cursor: pointer;
+        background: #876868;
+
+      }
+
+      .inner-play-area {
+        display: grid;
+        width: 175px;
+        height: 175px;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        transition: background 0.2s ease-in-out;
+        grid-template-columns: auto auto auto;
+      }
+      
+        
+    </style>
+    <div class="container">
+        <h1>Ultimate Tic-Tac-Toe</h1>
+        <div class="play-area">
+        <div id="block_0" class="block">
+            <div id="inner_play0" class = "inner-play-area">
+                <div id="0inner_0" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="0inner_1" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="0inner_2" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="0inner_3" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="0inner_4" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="0inner_5" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="0inner_6" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="0inner_7" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="0inner_8" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+            </div>
+        </div>
+        <div id="block_1" class="block">
+            <div id="inner_play1" class = "inner-play-area">
+                <div id="1inner_0" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="1inner_1" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="1inner_2" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="1inner_3" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="1inner_4" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="1inner_5" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="1inner_6" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="1inner_7" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="1inner_8" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+            </div>
+        </div>
+        <div id="block_2" class="block">
+            <div id="inner_play2" class = "inner-play-area">
+                <div id="2inner_0" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="2inner_1" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="2inner_2" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="2inner_3" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="2inner_4" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="2inner_5" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="2inner_6" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="2inner_7" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="2inner_8" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+            </div>
+        </div>
+        <div id="block_3" class="block">
+            <div id="inner_play3" class = "inner-play-area">
+                <div id="3inner_0" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="3inner_1" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="3inner_2" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="3inner_3" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="3inner_4" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="3inner_5" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="3inner_6" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="3inner_7" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="3inner_8" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+            </div>
+        </div>
+        <div id="block_4" class="block">
+            <div id="inner_play4" class = "inner-play-area">
+                <div id="4inner_0" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="4inner_1" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="4inner_2" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="4inner_3" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="4inner_4" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="4inner_5" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="4inner_6" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="4inner_7" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="4inner_8" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+            </div>
+        </div>
+        <div id="block_5" class="block">
+            <div id="inner_play5" class = "inner-play-area">
+                <div id="5inner_0" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="5inner_1" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="5inner_2" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="5inner_3" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="5inner_4" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="5inner_5" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="5inner_6" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="5inner_7" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="5inner_8" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+            </div>
+        </div>
+        <div id="block_6" class="block">
+            <div id="inner_play6" class = "inner-play-area">
+                <div id="6inner_0" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="6inner_1" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="6inner_2" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="6inner_3" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="6inner_4" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="6inner_5" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="6inner_6" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="6inner_7" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="6inner_8" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+            </div>
+        </div>
+        <div id="block_7" class="block">
+            <div id="inner_play7" class = "inner-play-area">
+                <div id="7inner_0" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="7inner_1" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="7inner_2" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="7inner_3" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="7inner_4" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="7inner_5" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="7inner_6" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="7inner_7" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="7inner_8" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+            </div>
+        </div>
+        <div id="block_8" class="block">
+            <div id="inner_play8" class = "inner-play-area">
+                <div id="8inner_0" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="8inner_1" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="8inner_2" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="8inner_3" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="8inner_4" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="8inner_5" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="8inner_6" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="8inner_7" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+                <div id="8inner_8" class="inner_block" onclick="place_x(this.id, this.parentElement)"></div>
+            </div>
+        </div>
+        
+        </div>
+    </div>
+  </body>
+
+</html>
