@@ -1,5 +1,7 @@
+{% extends 'tic_tac_toe/base.html' %}
 {% load static %}
 
+{% block content %}
 <!DOCTYPE html>
 
 <html lang="en">
@@ -10,9 +12,11 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Tic-Tac-Toe</title>
     <script src="{% static 'ult_tic_tac_toe/js/tic_tac_toe.js' %}"></script>
+    
   </head>
 
   <body>
+
     <style>
     * {
         margin: 0;
@@ -116,6 +120,8 @@
       
         
     </style>
+    
+
     <div class="container">
         <h1>Ultimate Tic-Tac-Toe</h1>
         <div class="play-area">
@@ -239,6 +245,7 @@
         
         </div>
     </div>
+{% endblock %}
   </body>
 
 </html>

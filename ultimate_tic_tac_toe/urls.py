@@ -20,8 +20,15 @@ from django.conf import settings
 from ult_tic_tac_toe import views
 
 urlpatterns = [
+
     path('admin/', admin.site.urls),
-    path('', views.home, name='home')
+    # Home page
+    path('', views.home, name='home'),
+    # Signup Page
+    path('signup/', views.signupuser, name = 'signupuser'),
+    # Logout user
+    path('logout/', views.logoutuser, name = 'logoutuser'),
+    path('login/', views.loginuser, name = 'loginuser'),
 
 ]
 
