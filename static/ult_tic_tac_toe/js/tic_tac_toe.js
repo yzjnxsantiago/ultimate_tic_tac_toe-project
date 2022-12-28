@@ -66,17 +66,17 @@ const chatSocket = new WebSocket(
 chatSocket.onmessage = function(e){
 
         let data = JSON.parse(e.data)
-        brodcast_move = data
         
+        brodcast_move = data
         obj           = data.message[3]
         inner_cell_id = data.message[2]
         outer_cell_id = data.message[1]
         cell          = document.getElementById(data.message[3])
         big_square    = document.getElementById(data.message[4])
 
-        var next_parent_id  = "inner_play" + String(inner_cell_id)
-        var next_parent     = document.getElementById(next_parent_id)
-
+        let next_parent_id  = "inner_play" + String(inner_cell_id)
+        let next_parent     = document.getElementById(next_parent_id)
+        
         if (data.message[0] == "X"){
 
             cell.innerHTML = "X"
@@ -89,7 +89,7 @@ chatSocket.onmessage = function(e){
 
         }
         
-        for (let i =0; i < outer_square.length; i++){
+        for (let i = 0; i < outer_square.length; i++){
 
             if (outer_square[i] == true){
                 
@@ -115,7 +115,6 @@ function place_x(obj, parent) {
     var cell            = document.getElementById(obj)
     var inner_cell_id   = obj[obj.length-1] 
     var outer_cell_id   = obj[0]
-    
 
     if (obj[0] == current_outer_square) {
         
@@ -126,14 +125,17 @@ function place_x(obj, parent) {
             if (x_o_count % 2 == 0) {
                 cell.innerHTML = "X";
                 inner_squares[outer_cell_id][inner_cell_id] = "X"
+                updateBoardDatabase('Game object (1)', 'xxx')
                 chatSocket.send(JSON.stringify({
                     'message': ["X", outer_cell_id, inner_cell_id, obj, parent.id]
                 }))
             }
 
             else {
+                
                 cell.innerHTML = "O";
                 inner_squares[outer_cell_id][inner_cell_id] = "O"
+                updateBoardDatabase('Game Object (1)', 'ooo')
 
                 chatSocket.send(JSON.stringify({
                     'message': ["O", outer_cell_id, inner_cell_id, obj, parent.id]
@@ -174,4 +176,23 @@ function setNoplay (parent){
 
     }
 
+}
+
+function updateBoardDatabase (room, gameState) {
+
+    $.ajax({
+        url: 'boarddata/',
+        cache: 'false',
+        dataType: 'json',
+        type: 'POST',
+        data: {
+
+            game_id: room,
+            state: gameState,
+            csrfmiddlewaretoken: csrftoken,
+
+        }, 
+        
+
+      });
 }

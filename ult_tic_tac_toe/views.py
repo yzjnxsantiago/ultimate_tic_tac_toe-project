@@ -1,11 +1,21 @@
 from django.shortcuts import render, redirect
+from json import dumps
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.contrib.auth import login, logout, authenticate
+from .models import Game
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
 
 def home(request):
-    return render(request, 'tic_tac_toe/tic_tac_toe.html')
+
+    user_list = User.objects.all()
+    for user in user_list:
+        if user.is_authenticated:
+            current_user = user.username
+    
+    return render(request, 'tic_tac_toe/tic_tac_toe.html', {'auth_user': dumps(current_user)})
 
 def signupuser(request):
     if request.method == 'GET':
@@ -38,3 +48,14 @@ def loginuser(request):
         else:
            login(request, user)
            return redirect('home') 
+
+@csrf_exempt
+def boarddata(request):
+    if request.method == 'POST':
+        game = Game.objects.get(room = 'test')
+        game_id = request.POST['game_id']
+        gameState = request.POST['state']
+        print(game_id, gameState,  game)
+        game.game_state = gameState
+        game.save()
+        return HttpResponse('')

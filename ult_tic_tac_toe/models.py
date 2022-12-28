@@ -1,9 +1,7 @@
 from django.db import models
 
 class Game(models.Model):
-    
-    game_state = models.BinaryField(max_length=100)
 
-    def __str__(self):
-        return self.name
+    room = models.CharField(max_length=100, default='test')
+    game_state = models.CharField(max_length=100)
     

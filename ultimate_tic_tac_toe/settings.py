@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'ultimate_tic_tac_toe',
+    'ult_tic_tac_toe'
+    
     
 ]
 

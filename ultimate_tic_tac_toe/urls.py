@@ -29,6 +29,7 @@ urlpatterns = [
     # Logout user
     path('logout/', views.logoutuser, name = 'logoutuser'),
     path('login/', views.loginuser, name = 'loginuser'),
+    path('boarddata/', views.boarddata, name = 'boarddata'), # Url that will update board database
 
 ]
 
