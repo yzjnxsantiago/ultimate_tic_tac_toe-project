@@ -9,43 +9,43 @@ let brodcast_move
 let x_o_count = 0
 let current_outer_square = 4
 const outer_square = [false, false, false, false, false, false, false, false, false]
-const inner_squares = [        [null, null, null,  
-                                null, null, null, 
-                                null, null, null],
+const inner_squares = [        ['z', 'z', 'z',  
+                                'z', 'z', 'z', 
+                                'z', 'z', 'z'],
 
-                                [null, null, null,  
-                                 null, null, null, 
-                                 null, null, null],
+                                ['z', 'z', 'z',  
+                                 'z', 'z', 'z', 
+                                 'z', 'z', 'z'],
 
-                                [null, null, null,  
-                                null, null, null, 
-                                null, null, null],
+                                ['z', 'z', 'z',  
+                                'z', 'z', 'z', 
+                                'z', 'z', 'z'],
 
-                                [null, null, null,  
-                                null, null, null, 
-                                null, null, null],
+                                ['z', 'z', 'z',  
+                                'z', 'z', 'z', 
+                                'z', 'z', 'z'],
 
-                                [null, null, null,  
-                                null, null, null, 
-                                null, null, null],
+                                ['z', 'z', 'z',  
+                                'z', 'z', 'z', 
+                                'z', 'z', 'z'],
 
-                                [null, null, null,  
-                                null, null, null, 
-                                null, null, null],
+                                ['z', 'z', 'z',  
+                                'z', 'z', 'z', 
+                                'z', 'z', 'z'],
 
-                                [null, null, null,  
-                                null, null, null, 
-                                null, null, null],
+                                ['z', 'z', 'z',  
+                                'z', 'z', 'z', 
+                                'z', 'z', 'z'],
 
-                                [null, null, null,  
-                                null, null, null, 
-                                null, null, null],
+                                ['z', 'z', 'z',  
+                                'z', 'z', 'z', 
+                                'z', 'z', 'z'],
 
-                                [null, null, null,  
-                                null, null, null, 
-                                null, null, null],
+                                ['z', 'z', 'z',  
+                                'z', 'z', 'z', 
+                                'z', 'z', 'z'],
                                 
-                      ]
+                      ] // Initializing board with 'z's for any moves that have not been played
 
 const potential_solutions = [   [0, 1, 2],
                                 [3, 4, 5],
@@ -123,19 +123,16 @@ function place_x(obj, parent) {
             x_o_count = x_o_count + 1;
             
             if (x_o_count % 2 == 0) {
-                cell.innerHTML = "X";
                 inner_squares[outer_cell_id][inner_cell_id] = "X"
-                updateBoardDatabase('Game object (1)', 'xxx')
+                updateBoardDatabase('Game object (1)', get_game_state(inner_squares))
                 chatSocket.send(JSON.stringify({
                     'message': ["X", outer_cell_id, inner_cell_id, obj, parent.id]
                 }))
             }
 
             else {
-                
-                cell.innerHTML = "O";
                 inner_squares[outer_cell_id][inner_cell_id] = "O"
-                updateBoardDatabase('Game Object (1)', 'ooo')
+                updateBoardDatabase('Game object (1)', get_game_state(inner_squares))
 
                 chatSocket.send(JSON.stringify({
                     'message': ["O", outer_cell_id, inner_cell_id, obj, parent.id]
@@ -195,4 +192,55 @@ function updateBoardDatabase (room, gameState) {
         
 
       });
+}
+
+function getBoardState (room_id, gameState) {
+    
+
+    $.get({
+        url: 'boarddata/',
+        cache: 'false',
+        dataType: 'json',
+        type: 'GET',
+        data: {
+
+            room: room_id,
+            game_state: gameState,
+
+        }, 
+        
+
+      });
+}
+
+
+function get_game_state(game_map) {
+
+    let game_state_1d = ''; // Changing the game from a 2d array to a string of 81 characters u_ttt 
+
+    // Make the 2d array into a string that will be stored in the database
+
+    for (let i = 0; i < game_map.length; i++) {
+        for (let j = 0; j < 9; j++) {
+           if (game_map[i][j] == 'X') { // If there is no x or o
+
+                game_state_1d = game_state_1d.concat('x'); // Check for x
+
+           }
+           else if (game_map[i][j] == 'O'){
+
+                game_state_1d = game_state_1d.concat('o'); // Check for o
+           }
+
+           else {
+
+                game_state_1d = game_state_1d.concat(' '); // Check for no x or o
+           }
+            
+        }
+
+    }
+
+    return game_state_1d;
+
 }

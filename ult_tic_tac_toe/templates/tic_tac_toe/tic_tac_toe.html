@@ -11,8 +11,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Ultimate Tic-Tac-Toe</title>
+    <script> 
+      var game_id = 'test'
+      var game_state = '{{game_state}}'
+      var user = '{{user.username}}'
+    </script>
     <script src="{% static 'ult_tic_tac_toe/js/tic_tac_toe.js' %}"></script>
-    
+    <script src="{% static 'ult_tic_tac_toe/js/ttt_load.js' %}"></script>
     
   </head>
 
@@ -245,6 +250,8 @@
         
         </div>
     </div>
+
+    <button>clear</button>
 {% endblock %}
   </body>
 

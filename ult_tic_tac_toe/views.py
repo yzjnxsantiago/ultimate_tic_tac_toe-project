@@ -10,12 +10,11 @@ from django.http import HttpResponse
 
 def home(request):
 
-    user_list = User.objects.all()
-    for user in user_list:
-        if user.is_authenticated:
-            current_user = user.username
+    game = Game.objects.get(room = 'test')
+    game_id = game.room
+    gameState = game.game_state
     
-    return render(request, 'tic_tac_toe/tic_tac_toe.html', {'auth_user': dumps(current_user)})
+    return render(request, 'tic_tac_toe/tic_tac_toe.html', {'game_room': game_id, 'game_state': gameState})
 
 def signupuser(request):
     if request.method == 'GET':
@@ -55,7 +54,7 @@ def boarddata(request):
         game = Game.objects.get(room = 'test')
         game_id = request.POST['game_id']
         gameState = request.POST['state']
-        print(game_id, gameState,  game)
+        print(game_id, gameState)
         game.game_state = gameState
         game.save()
         return HttpResponse('')
