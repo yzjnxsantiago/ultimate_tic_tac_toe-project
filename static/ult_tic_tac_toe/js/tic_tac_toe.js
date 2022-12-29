@@ -9,43 +9,7 @@ let brodcast_move
 let x_o_count = 0
 let current_outer_square = 4
 const outer_square = [false, false, false, false, false, false, false, false, false]
-const inner_squares = [        ['z', 'z', 'z',  
-                                'z', 'z', 'z', 
-                                'z', 'z', 'z'],
-
-                                ['z', 'z', 'z',  
-                                 'z', 'z', 'z', 
-                                 'z', 'z', 'z'],
-
-                                ['z', 'z', 'z',  
-                                'z', 'z', 'z', 
-                                'z', 'z', 'z'],
-
-                                ['z', 'z', 'z',  
-                                'z', 'z', 'z', 
-                                'z', 'z', 'z'],
-
-                                ['z', 'z', 'z',  
-                                'z', 'z', 'z', 
-                                'z', 'z', 'z'],
-
-                                ['z', 'z', 'z',  
-                                'z', 'z', 'z', 
-                                'z', 'z', 'z'],
-
-                                ['z', 'z', 'z',  
-                                'z', 'z', 'z', 
-                                'z', 'z', 'z'],
-
-                                ['z', 'z', 'z',  
-                                'z', 'z', 'z', 
-                                'z', 'z', 'z'],
-
-                                ['z', 'z', 'z',  
-                                'z', 'z', 'z', 
-                                'z', 'z', 'z'],
-                                
-                      ] // Initializing board with 'z's for any moves that have not been played
+let   inner_squares = db_to_2D_array(game_state)
 
 const potential_solutions = [   [0, 1, 2],
                                 [3, 4, 5],
@@ -73,6 +37,9 @@ chatSocket.onmessage = function(e){
         outer_cell_id = data.message[1]
         cell          = document.getElementById(data.message[3])
         big_square    = document.getElementById(data.message[4])
+        x_or_o        = data.message[5]
+        
+        x_o_count     = x_or_o
 
         let next_parent_id  = "inner_play" + String(inner_cell_id)
         let next_parent     = document.getElementById(next_parent_id)
@@ -126,7 +93,7 @@ function place_x(obj, parent) {
                 inner_squares[outer_cell_id][inner_cell_id] = "X"
                 updateBoardDatabase('Game object (1)', get_game_state(inner_squares))
                 chatSocket.send(JSON.stringify({
-                    'message': ["X", outer_cell_id, inner_cell_id, obj, parent.id]
+                    'message': ["X", outer_cell_id, inner_cell_id, obj, parent.id, x_o_count]
                 }))
             }
 
@@ -135,7 +102,7 @@ function place_x(obj, parent) {
                 updateBoardDatabase('Game object (1)', get_game_state(inner_squares))
 
                 chatSocket.send(JSON.stringify({
-                    'message': ["O", outer_cell_id, inner_cell_id, obj, parent.id]
+                    'message': ["O", outer_cell_id, inner_cell_id, obj, parent.id, x_o_count]
                 }))
 
             }
@@ -222,12 +189,12 @@ function get_game_state(game_map) {
 
     for (let i = 0; i < game_map.length; i++) {
         for (let j = 0; j < 9; j++) {
-           if (game_map[i][j] == 'X') { // If there is no x or o
+           if (game_map[i][j] == 'X' || game_map[i][j] == 'x') { // If there is no x or o
 
                 game_state_1d = game_state_1d.concat('x'); // Check for x
 
            }
-           else if (game_map[i][j] == 'O'){
+           else if (game_map[i][j] == 'O' || game_map[i][j] == 'o'){
 
                 game_state_1d = game_state_1d.concat('o'); // Check for o
            }
@@ -242,5 +209,29 @@ function get_game_state(game_map) {
     }
 
     return game_state_1d;
+
+}
+
+function db_to_2D_array(game_map) {
+
+    let game_state = [];
+    let count = 0
+
+    // setup a 2d array from the 1d char in the db (would be so much easier if it was all 1d but good note for next time)
+    for (let i = 0; i < 9; i++) { // 9 for ttt board
+
+        game_state.push([]); // Create another []
+
+        for (let j = 0; j < 9; j++){ //9 for ttt board
+
+            game_state[i].push(game_map[count]); // push the letter to the char array 
+            count ++; 
+
+        }
+
+       
+    }
+
+    return game_state
 
 }
