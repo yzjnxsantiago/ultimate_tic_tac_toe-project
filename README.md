@@ -1,6 +1,6 @@
 # Ultimate Tic-Tac-Toe
 
-## Note: Not currently in production 
+## Note: Not currently in production
 
 Welcome to ultimate tic tac toe. Create a user and start playing against random players and friends.
 
@@ -12,3 +12,4 @@ Currently I am using Django Channels and websockets so that multiple users can p
 
 I am also using Ajax with jQuery to update the game state and save it into a database (sqlite3 for development)
 
+## TODO, create a redis database for rooms so that multiple games can run
