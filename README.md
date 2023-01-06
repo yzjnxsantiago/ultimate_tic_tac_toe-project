@@ -11,5 +11,3 @@ Here is a preview of the website. I have create a user signup, signout and login
 Currently I am using Django Channels and websockets so that multiple users can play with each other.
 
 I am also using Ajax with jQuery to update the game state and save it into a database (sqlite3 for development)
-
-## TODO, create a redis database for rooms so that multiple games can run
