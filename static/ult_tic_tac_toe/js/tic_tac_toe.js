@@ -10,6 +10,9 @@ let x_o_count = 0
 let current_outer_square = 4
 const outer_square = [false, false, false, false, false, false, false, false, false]
 let   inner_squares = db_to_2D_array(game_state)
+const connected_users = []
+
+
 
 const potential_solutions = [   [0, 1, 2],
                                 [3, 4, 5],
@@ -27,9 +30,17 @@ const chatSocket = new WebSocket(
     + '/ws/socket-server/'
 );
 
+$( document ).ready(function() {
+
+    updatePlayer1('Game Object (1)', user)
+
+})
+
+
 chatSocket.onmessage = function(e){
 
         let data = JSON.parse(e.data)
+
         
         brodcast_move = data
         obj           = data.message[3]
@@ -40,6 +51,8 @@ chatSocket.onmessage = function(e){
         x_or_o        = data.message[5]
         
         x_o_count     = x_or_o
+
+        let players   = data.message[6]
 
         let next_parent_id  = "inner_play" + String(inner_cell_id)
         let next_parent     = document.getElementById(next_parent_id)
@@ -83,6 +96,8 @@ function place_x(obj, parent) {
     var inner_cell_id   = obj[obj.length-1] 
     var outer_cell_id   = obj[0]
 
+
+
     if (obj[0] == current_outer_square) {
         
         if (cell.childNodes.length === 0){ 
@@ -93,7 +108,7 @@ function place_x(obj, parent) {
                 inner_squares[outer_cell_id][inner_cell_id] = "X"
                 updateBoardDatabase('Game object (1)', get_game_state(inner_squares))
                 chatSocket.send(JSON.stringify({
-                    'message': ["X", outer_cell_id, inner_cell_id, obj, parent.id, x_o_count]
+                    'message': ["X", outer_cell_id, inner_cell_id, obj, parent.id, x_o_count, connected_users]
                 }))
             }
 
@@ -102,7 +117,7 @@ function place_x(obj, parent) {
                 updateBoardDatabase('Game object (1)', get_game_state(inner_squares))
 
                 chatSocket.send(JSON.stringify({
-                    'message': ["O", outer_cell_id, inner_cell_id, obj, parent.id, x_o_count]
+                    'message': ["O", outer_cell_id, inner_cell_id, obj, parent.id, x_o_count, connected_users]
                 }))
 
             }
@@ -120,11 +135,11 @@ function place_x(obj, parent) {
 
 function setPlay (parent){
 
-    var current_inner_squares = parent.children
+    var current_inner_squares = parent.children // find the correct html
     
-    for (let i = 0; i < current_inner_squares.length; i++){
+    for (let i = 0; i < current_inner_squares.length; i++){ 
 
-        current_inner_squares[i].style.borderColor = "green"
+        current_inner_squares[i].style.borderColor = "green" // change the css of the border to green
 
     }
 
@@ -136,7 +151,7 @@ function setNoplay (parent){
     
     for (let i = 0; i < current_inner_squares.length; i++){
 
-        current_inner_squares[i].style.borderColor = "black"
+        current_inner_squares[i].style.borderColor = "black" //change css to black border
 
     }
 
@@ -161,23 +176,44 @@ function updateBoardDatabase (room, gameState) {
       });
 }
 
-function getBoardState (room_id, gameState) {
-    
 
-    $.get({
+function updatePlayer1(room, player){
+
+    $.ajax({
         url: 'boarddata/',
         cache: 'false',
         dataType: 'json',
-        type: 'GET',
+        type: 'POST',
         data: {
 
-            room: room_id,
-            game_state: gameState,
+            game_id: room,
+            player1: player,
+            csrfmiddlewaretoken: csrftoken,
 
         }, 
         
 
       });
+}
+
+function updatePlayer2(room, player){
+
+    $.ajax({
+        url: 'boarddata/',
+        cache: 'false',
+        dataType: 'json',
+        type: 'POST',
+        data: {
+
+            game_id: room,
+            player2: player,
+            csrfmiddlewaretoken: csrftoken,
+
+        }, 
+        
+
+      });
+
 }
 
 

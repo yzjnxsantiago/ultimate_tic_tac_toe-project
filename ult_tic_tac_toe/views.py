@@ -52,9 +52,24 @@ def loginuser(request):
 def boarddata(request):
     if request.method == 'POST':
         game = Game.objects.get(room = 'test')
-        game_id = request.POST['game_id']
-        gameState = request.POST['state']
-        print(game_id, gameState)
-        game.game_state = gameState
+        try:
+            game_id = request.POST['game_id']
+        except:
+            pass
+        try:
+            gameState = request.POST['state']
+            game.game_state = gameState
+            print(game_id, gameState)
+        except:
+            pass
+        try:
+             
+             game.player1 = request.POST['player1']
+        except:
+            pass
+        try:
+            game.player2 = request.POST['player2']
+        except:
+            pass
         game.save()
         return HttpResponse('')
