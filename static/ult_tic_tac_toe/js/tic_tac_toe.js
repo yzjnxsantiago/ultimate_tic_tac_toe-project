@@ -116,7 +116,7 @@ function place_x(obj, parent) {
                 }))
             }
 
-            else if (next_move == "True" && user == p2) {
+            else if (player_move[0] == "True" && user == p2) {
                 inner_squares[outer_cell_id][inner_cell_id] = "O"
                 updateBoardDatabase('Game object (1)', get_game_state(inner_squares), 'X')
                 player_move[0] = "False"
@@ -128,8 +128,26 @@ function place_x(obj, parent) {
         }
         
         /*for (let i = 0; i < potential_solutions.length; i++){
-            const check[a, b, c] = potential_solutions[i]
+            
+            const [a, b, c] = potential_solutions[i]
+            
+            let inner_win = false
+            let inner_type = ''
+
+            if ((inner_squares[a] == 'x' || inner_squares[a] == 'o') && 
+                (inner_squares[b] == 'x' || inner_squares[b] == 'o') && 
+                (inner_squares[c] == 'x' || inner_squares[c] == 'o'))  {
                 
+                inner_win = true
+
+                inner_location = [a, b, c]
+
+                outer_location = parent.id
+
+                if (inner_squares[a] == 'x') { inner_type = 'X' }
+                else if (inner_squares[a] == 'o') { inner_type = 'O' }
+
+            }
 
 
         }*/
