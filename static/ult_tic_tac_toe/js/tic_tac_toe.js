@@ -10,7 +10,7 @@ let current_outer_square = 4
 const outer_square = [false, false, false, false, false, false, false, false, false]
 let inner_squares = db_to_2D_array(game_state)
 let player_move = [next_move]
-
+let local_win = [null, null, null, null]
 
 const potential_solutions = [   [0, 1, 2],
                                 [3, 4, 5],
@@ -47,6 +47,7 @@ $( document ).ready(function() {
     }
 })
 
+//
 
 chatSocket.onmessage = function(e){
 
@@ -60,10 +61,16 @@ chatSocket.onmessage = function(e){
         outer_cell_id = data.message[1]
         cell          = document.getElementById(data.message[3])
         big_square    = document.getElementById(data.message[4])
+        
+
+        local_win[0] = data.message[6]
+        local_win[1] = data.message[7]
+        local_win[2] = data.message[8]
+        local_win[3] = document.getElementById(data.message[9])
 
         let next_parent_id  = "inner_play" + String(inner_cell_id)
         let next_parent     = document.getElementById(next_parent_id)
-        
+        big_square.parentElement.innerHTML  
         if (data.message[0] == "X"){
 
             cell.innerHTML = "X"
@@ -73,6 +80,25 @@ chatSocket.onmessage = function(e){
         else if (data.message[0] == "O"){
 
             cell.innerHTML = "O"
+
+        }
+
+        if (local_win[0] == true) {
+
+            if (inner_type == 'X') {
+
+                local_win[3].parentElement.innerHTML += "<h style='z-index: 2; font-size: 200; position: absolute;'>X</h>"
+
+            }
+
+            else if (inner_type == 'O') {
+
+                local_win[3].parentElement.innerHTML += "<h style='z-index: 2; font-size: 200; position: absolute;'>O</h>"
+
+
+            }
+            
+
 
         }
         
@@ -102,6 +128,11 @@ function place_x(obj, parent) {
     var cell            = document.getElementById(obj)
     var inner_cell_id   = obj[obj.length-1] 
     var outer_cell_id   = obj[0]
+    let xo_bit          = ''
+    let inner_win = false
+    let inner_type = ''
+    let inner_location
+    let outer_location
 
     if (obj[0] == current_outer_square) {
         
@@ -111,28 +142,21 @@ function place_x(obj, parent) {
                 inner_squares[outer_cell_id][inner_cell_id] = "X"
                 updateBoardDatabase('Game object (1)', get_game_state(inner_squares), 'O')
                 player_move[0] = "True"
-                chatSocket.send(JSON.stringify({
-                    'message': ["X", outer_cell_id, inner_cell_id, obj, parent.id, player_move[0]]
-                }))
+                xo_bit = 'X'
             }
 
             else if (player_move[0] == "True" && user == p2) {
                 inner_squares[outer_cell_id][inner_cell_id] = "O"
                 updateBoardDatabase('Game object (1)', get_game_state(inner_squares), 'X')
                 player_move[0] = "False"
-                chatSocket.send(JSON.stringify({
-                    'message': ["O", outer_cell_id, inner_cell_id, obj, parent.id, player_move[0]]
-                }))
-
+                xo_bit = 'O'
             }
+
         }
         
-        /*for (let i = 0; i < potential_solutions.length; i++){
+        for (let i = 0; i < potential_solutions.length; i++){
             
             const [a, b, c] = potential_solutions[i]
-            
-            let inner_win = false
-            let inner_type = ''
 
             if ((inner_squares[a] == 'x' || inner_squares[a] == 'o') && 
                 (inner_squares[b] == 'x' || inner_squares[b] == 'o') && 
@@ -150,7 +174,12 @@ function place_x(obj, parent) {
             }
 
 
-        }*/
+        }
+
+        chatSocket.send(JSON.stringify({
+            'message': [xo_bit, outer_cell_id, inner_cell_id, obj, parent.id, player_move[0], 
+                        inner_win, inner_type, inner_location, outer_location]
+        }))
    
     }
 }
@@ -292,5 +321,11 @@ function db_to_2D_array(game_map) {
     }
 
     return game_state
+
+}
+
+function place_big_xo(){
+
+
 
 }
