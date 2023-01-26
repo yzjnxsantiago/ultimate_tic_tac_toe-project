@@ -6,12 +6,10 @@
  */
 
 let brodcast_move
-let x_o_count = 0
 let current_outer_square = 4
 const outer_square = [false, false, false, false, false, false, false, false, false]
-let   inner_squares = db_to_2D_array(game_state)
-const connected_users = []
-
+let inner_squares = db_to_2D_array(game_state)
+let player_move = [next_move]
 
 
 const potential_solutions = [   [0, 1, 2],
@@ -32,8 +30,21 @@ const chatSocket = new WebSocket(
 
 $( document ).ready(function() {
 
-    updatePlayer1('Game Object (1)', user)
+    if (user != ""){
 
+        if (p1 != user && p2 != user){
+        
+            if (p1 == 'none') {
+                updatePlayer1('Game Object (1)', user)
+            }
+            else if (p2 == 'none'){
+
+                updatePlayer2('Game Object (1)', user)
+            }
+            else console.log("Lobby is full :(")
+        
+        }
+    }
 })
 
 
@@ -41,6 +52,7 @@ chatSocket.onmessage = function(e){
 
         let data = JSON.parse(e.data)
 
+        player_move[0] = data.message[5]
         
         brodcast_move = data
         obj           = data.message[3]
@@ -48,11 +60,6 @@ chatSocket.onmessage = function(e){
         outer_cell_id = data.message[1]
         cell          = document.getElementById(data.message[3])
         big_square    = document.getElementById(data.message[4])
-        x_or_o        = data.message[5]
-        
-        x_o_count     = x_or_o
-
-        let players   = data.message[6]
 
         let next_parent_id  = "inner_play" + String(inner_cell_id)
         let next_parent     = document.getElementById(next_parent_id)
@@ -96,28 +103,25 @@ function place_x(obj, parent) {
     var inner_cell_id   = obj[obj.length-1] 
     var outer_cell_id   = obj[0]
 
-
-
     if (obj[0] == current_outer_square) {
         
         if (cell.childNodes.length === 0){ 
             
-            x_o_count = x_o_count + 1;
-            
-            if (x_o_count % 2 == 0) {
+            if (player_move[0] == "False" && user == p1) {
                 inner_squares[outer_cell_id][inner_cell_id] = "X"
-                updateBoardDatabase('Game object (1)', get_game_state(inner_squares))
+                updateBoardDatabase('Game object (1)', get_game_state(inner_squares), 'O')
+                player_move[0] = "True"
                 chatSocket.send(JSON.stringify({
-                    'message': ["X", outer_cell_id, inner_cell_id, obj, parent.id, x_o_count, connected_users]
+                    'message': ["X", outer_cell_id, inner_cell_id, obj, parent.id, player_move[0]]
                 }))
             }
 
-            else {
+            else if (next_move == "True" && user == p2) {
                 inner_squares[outer_cell_id][inner_cell_id] = "O"
-                updateBoardDatabase('Game object (1)', get_game_state(inner_squares))
-
+                updateBoardDatabase('Game object (1)', get_game_state(inner_squares), 'X')
+                player_move[0] = "False"
                 chatSocket.send(JSON.stringify({
-                    'message': ["O", outer_cell_id, inner_cell_id, obj, parent.id, x_o_count, connected_users]
+                    'message': ["O", outer_cell_id, inner_cell_id, obj, parent.id, player_move[0]]
                 }))
 
             }
@@ -157,7 +161,7 @@ function setNoplay (parent){
 
 }
 
-function updateBoardDatabase (room, gameState) {
+function updateBoardDatabase (room, gameState, player_move) {
 
     $.ajax({
         url: 'boarddata/',
@@ -168,6 +172,7 @@ function updateBoardDatabase (room, gameState) {
 
             game_id: room,
             state: gameState,
+            player_move: player_move,
             csrfmiddlewaretoken: csrftoken,
 
         }, 

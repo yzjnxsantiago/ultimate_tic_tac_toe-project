@@ -13,8 +13,11 @@ def home(request):
     game = Game.objects.get(room = 'test')
     game_id = game.room
     gameState = game.game_state
+    p1 = game.player1
+    p2 = game.player2
+    next_move = game.player_move
     
-    return render(request, 'tic_tac_toe/tic_tac_toe.html', {'game_room': game_id, 'game_state': gameState})
+    return render(request, 'tic_tac_toe/tic_tac_toe.html', {'game_room': game_id, 'game_state': gameState, 'p1': p1, 'p2': p2, 'next_move': next_move})
 
 def signupuser(request):
     if request.method == 'GET':
@@ -69,6 +72,14 @@ def boarddata(request):
             pass
         try:
             game.player2 = request.POST['player2']
+        except:
+            pass
+        try:
+            next_move = request.POST['player_move']
+            if next_move == 'X':
+                game.player_move = False
+            elif next_move == 'O':
+                game.player_move = True
         except:
             pass
         game.save()
