@@ -68,9 +68,12 @@ chatSocket.onmessage = function(e){
         local_win[2] = data.message[8]
         local_win[3] = document.getElementById(data.message[9])
 
+        is_move      = data.message[10]
+
         let next_parent_id  = "inner_play" + String(inner_cell_id)
         let next_parent     = document.getElementById(next_parent_id)
         big_square.parentElement.innerHTML  
+
         if (data.message[0] == "X"){
 
             cell.innerHTML = "X"
@@ -102,25 +105,29 @@ chatSocket.onmessage = function(e){
 
         }
         
-        for (let i = 0; i < outer_square.length; i++){
+        if (is_move == true) { 
 
-            if (outer_square[i] == true){
-                
-                outer_square[i] == false
-                setNoplay(big_square)
+            is_move = false
 
-            }
+            for (let i = 0; i < outer_square.length; i++){
+
+                if (outer_square[i] == true){
+                    
+                    outer_square[i] == false
+                    setNoplay(big_square)
+
+                }
 
 
-            if (i == obj[obj.length-1]){
-                
-                setPlay(next_parent)
-                outer_square[i] = true
-                current_outer_square = i
+                if (i == obj[obj.length-1]){
+                    
+                    setPlay(next_parent)
+                    outer_square[i] = true
+                    current_outer_square = i
 
-            }
-        }   
-        
+                }
+            }   
+        }
 }
 
 function place_x(obj, parent) {
@@ -133,6 +140,7 @@ function place_x(obj, parent) {
     let inner_type = ''
     let inner_location
     let outer_location
+    let move_made = false
 
     if (obj[0] == current_outer_square) {
         
@@ -143,6 +151,7 @@ function place_x(obj, parent) {
                 updateBoardDatabase('Game object (1)', get_game_state(inner_squares), 'O')
                 player_move[0] = "True"
                 xo_bit = 'X'
+                move_made = true
             }
 
             else if (player_move[0] == "True" && user == p2) {
@@ -150,6 +159,7 @@ function place_x(obj, parent) {
                 updateBoardDatabase('Game object (1)', get_game_state(inner_squares), 'X')
                 player_move[0] = "False"
                 xo_bit = 'O'
+                move_made = true
             }
 
         }
@@ -178,7 +188,7 @@ function place_x(obj, parent) {
 
         chatSocket.send(JSON.stringify({
             'message': [xo_bit, outer_cell_id, inner_cell_id, obj, parent.id, player_move[0], 
-                        inner_win, inner_type, inner_location, outer_location]
+                        inner_win, inner_type, inner_location, outer_location, move_made]
         }))
    
     }
